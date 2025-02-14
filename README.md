@@ -37,8 +37,6 @@ XDNS is available as both an `.exe` and an `.msi` installer.
 
 ## Screenshots & Icon
 
-*(Place your screenshots in a dedicated `screenshots` folder and update the image paths as needed.)*
-
 ### Application Screenshots
 
 ![XDNS Screenshot 1](./screenshots/screenshot1.png)  
