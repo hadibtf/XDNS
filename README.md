@@ -23,7 +23,7 @@
 
 XDNS is available as both an `.exe` and an `.msi` installer.
 
-1. **Download**: Get the latest release from the [Releases](#) page.
+1. **Download**: Get the latest release from the [Releases](https://github.com/hadibtf/XDNS/releases/tag/v1.0.0) page.
 2. **Choose Your Installer**:
     - **.exe Installer**: A standalone executable file.
     - **.msi Installer**: A Windows Installer package for a more integrated installation experience.
