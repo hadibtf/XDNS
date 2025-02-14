@@ -1,5 +1,7 @@
 # XDNS
 
+![XDNS Icon](./screenshots/icon.png)
+
 **XDNS** is a Compose Multiplatform Desktop application designed for efficient DNS management on Windows. It provides multiple predefined DNS configurations and the ability to flush the DNS cache, making network troubleshooting and optimization simpler than ever.
 
 ## Features
@@ -41,9 +43,7 @@ XDNS is available as both an `.exe` and an `.msi` installer.
 
 ![XDNS Screenshot 1](./screenshots/screenshot1.png)  
 
-### Application Icon
 
-![XDNS Icon](./screenshots/icon.png)
 
 ## Contributing
 
