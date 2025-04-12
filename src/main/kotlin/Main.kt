@@ -45,7 +45,7 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         resizable = false,
         state = WindowState(width = 350.dp, height = 575.dp),
-        icon = painterResource("icon.png")
+        icon = painterResource("icon.ico"),
     ) {
         MaterialTheme {
             App()
