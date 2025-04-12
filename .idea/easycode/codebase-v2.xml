@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.obiscr.chatgpt.settings.EasyCodeState">
+    <option name="projectFiles" value="$PROJECT_DIR$/src/main/kotlin/data/DnsConfig.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/repositories/DnsRepository.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/ui/composables/ActionButtons.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/ui/composables/CurrentDnsDisplay.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/ui/composables/DnsEntry.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/ui/composables/OutputText.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/ui/App.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/viewmodels/DnsViewModel.kt;C:/Users/arman co/IdeaProjects/XDNS/src/main/kotlin/Main.kt;C:/Users/arman co/IdeaProjects/XDNS/build.gradle.kts;C:/Users/arman co/IdeaProjects/XDNS/README.md;C:/Users/arman co/IdeaProjects/XDNS/settings.gradle.kts" />
+  </component>
+</project>

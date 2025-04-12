@@ -2,48 +2,70 @@ package ui.composables
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteSweep
+import androidx.compose.material.icons.filled.Restore
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun ActionButtons(
-    modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     onReset: () -> Unit = {},
     onClearCache: () -> Unit = {}
 ) {
-    Column(
-        modifier = modifier.height(86.dp),
-        verticalArrangement = Arrangement.SpaceEvenly
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
+        // Reset DNS Button
         Button(
-            modifier = modifier.weight(0.45f).fillMaxWidth(),
             onClick = onReset,
             enabled = !isLoading,
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xffafd8ff))
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.secondary,
+                contentColor = MaterialTheme.colors.onSecondary,
+                disabledBackgroundColor = MaterialTheme.colors.secondary.copy(alpha = 0.3f)
+            )
         ) {
-            Text("Revert to DHCP")
+            Icon(
+                Icons.Default.Restore,
+                contentDescription = "Reset DNS",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Reset DNS")
         }
-        Spacer(modifier = Modifier.weight(0.1f))
-        Button(
-            modifier = modifier.weight(0.45f).fillMaxWidth(),
+        
+        Spacer(modifier = Modifier.width(16.dp))
+        
+        // Clear DNS Cache Button
+        OutlinedButton(
             onClick = onClearCache,
             enabled = !isLoading,
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xffccff9f))
+            modifier = Modifier.weight(1f),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colors.primaryVariant,
+                disabledContentColor = MaterialTheme.colors.primaryVariant.copy(alpha = 0.3f)
+            )
         ) {
-            Text("Flush DNS Cache")
+            Icon(
+                Icons.Default.DeleteSweep,
+                contentDescription = "Clear Cache",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Clear Cache")
         }
     }
 }
 
-@Composable
 @Preview
+@Composable
 fun ActionButtonsPreview() {
     MaterialTheme {
         ActionButtons()

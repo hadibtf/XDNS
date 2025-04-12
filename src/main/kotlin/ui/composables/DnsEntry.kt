@@ -4,8 +4,8 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Dns
+import androidx.compose.material.icons.filled.NetworkCheck
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,23 +14,59 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import data.DnsConfig
-import data.sanctionsDns
+import data.DnsConfigurations
 
 @Composable
-fun DnsEntry(dns: DnsConfig = sanctionsDns[0], isLoading: Boolean = false, onExecute: (Array<String>) -> Unit = {}) {
-    Card(modifier = Modifier.fillMaxWidth().height(85.dp).padding(vertical = 4.dp),elevation = 12.dp,) {
+fun DnsEntry(
+    dns: DnsConfig = DnsConfigurations.sanctionsDns[0],
+    isLoading: Boolean = false,
+    onExecute: (Array<String>) -> Unit = {}
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        elevation = 4.dp,
+        backgroundColor = MaterialTheme.colors.surface
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.padding(8.dp)
         ) {
-            Spacer(Modifier.width(8.dp))
-            Icon(Icons.Default.Star, contentDescription = "DNS", tint = Color(0xffffaf63))
-            Spacer(Modifier.width(8.dp))
-            Column(modifier = Modifier.weight(3f)) {
-                Text(dns.name, fontWeight = FontWeight.Bold)
-                Text("Primary: ${dns.primary}", fontSize = 12.sp, color = Color.Gray)
-                Text("Secondary: ${dns.secondary}", fontSize = 12.sp, color = Color.Gray)
+            // DNS Icon based on category
+            val icon = when (dns.category) {
+                "Sanctions" -> Icons.Default.NetworkCheck
+                else -> Icons.Default.Dns
             }
+            
+            Icon(
+                imageVector = icon,
+                contentDescription = "DNS icon",
+                tint = MaterialTheme.colors.primaryVariant,
+                modifier = Modifier.size(24.dp).padding(start = 4.dp)
+            )
+            
+            // DNS Information
+            Column(
+                modifier = Modifier.weight(3f).padding(horizontal = 12.dp)
+            ) {
+                Text(
+                    text = dns.name,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.onSurface
+                )
+                Text(
+                    text = "Primary: ${dns.primary}",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
+                )
+                Text(
+                    text = "Secondary: ${dns.secondary}",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.7f)
+                )
+            }
+            
+            // Set DNS Button
             Button(
                 onClick = {
                     onExecute(
@@ -44,10 +80,10 @@ fun DnsEntry(dns: DnsConfig = sanctionsDns[0], isLoading: Boolean = false, onExe
                     )
                 },
                 enabled = !isLoading,
-                modifier = Modifier.weight(1f).fillMaxHeight(),
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xffffaf63),
-                    contentColor = Color(0xaa000000)
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary,
+                    disabledBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.3f)
                 )
             ) {
                 Text("Set")
@@ -56,7 +92,7 @@ fun DnsEntry(dns: DnsConfig = sanctionsDns[0], isLoading: Boolean = false, onExe
     }
 }
 
-@Preview()
+@Preview
 @Composable
 fun DnsEntryPreview() {
     MaterialTheme {

@@ -4,73 +4,85 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import viewmodels.DnsViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import ui.composables.ActionButtons
-import ui.composables.CurrentDnsDisplay
-import ui.composables.DnsEntry
-import ui.composables.OutputText
+import ui.composables.*
+import ui.theme.XDNSTheme
 
 @Composable
 fun App(viewModel: DnsViewModel = remember { DnsViewModel() }) {
-    LazyColumn(
-        modifier = Modifier.padding(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        item {
-            // Tabs
-            TabRow(selectedTabIndex = viewModel.tabIndex, backgroundColor = Color(0xffffaf63)) {
-                listOf("Sanctions", "Download Speed").forEachIndexed { index, title ->
-                    Tab(
-                        selected = viewModel.tabIndex == index,
-                        onClick = { viewModel.tabIndex(index) },
-                        modifier = Modifier.padding(4.dp)
-                    ) {
-                        Text(title, modifier = Modifier.padding(8.dp))
-                    }
+    // The main gradient background
+    GradientBackground {
+        // Main content column with padding
+        Column(
+            modifier = Modifier.fillMaxSize().padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Header with status
+            DnsHeader(
+                currentDns = viewModel.currentDns,
+                isProtected = viewModel.isProtected
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // Compact control panel
+            CompactControlPanel(
+                isLoading = viewModel.isLoading,
+                onResetDns = { viewModel.resetDns() },
+                onClearCache = { viewModel.clearCache() },
+                onRefreshStatus = { viewModel.fetchCurrentDns() }
+            )
+            
+            // Status indicator
+            StatusIndicator(
+                statusMessage = viewModel.outputText,
+                isLoading = viewModel.isLoading
+            )
+            
+            // DNS navigation component
+            DnsNavigation(
+                categories = viewModel.tabCategories,
+                selectedIndex = viewModel.selectedTabIndex,
+                onCategorySelected = { viewModel.onTabSelected(it) }
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // DNS list
+            LazyColumn(
+                modifier = Modifier.weight(1f)
+            ) {
+                items(viewModel.currentList) { dns ->
+                    PremiumDnsCard(
+                        dns = dns,
+                        isActive = dns == viewModel.activeDns,
+                        isLoading = viewModel.isLoading,
+                        onSelect = { viewModel.setDns(dns) }
+                    )
                 }
             }
-
-            // Current DNS Display
-            CurrentDnsDisplay(viewModel.currentDns)
-
-            // Revert/Flush Buttons
-            ActionButtons(
-                isLoading = viewModel.isLoading,
-                onReset = { viewModel.resetDns() },
-                onClearCache = { viewModel.clearCache() }
+            
+            // Footer
+            Text(
+                text = "XDNS v1.1.0",
+                style = MaterialTheme.typography.caption,
+                color = MaterialTheme.colors.onBackground.copy(alpha = 0.5f),
+                modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
             )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            //Loading Indicator
-            if (viewModel.isLoading) {
-                CircularProgressIndicator(backgroundColor = Color(0xffffaf63))
-            }
-            //Action result
-            OutputText(viewModel.outputText)
-
-            // DNS Option Buttons
-            viewModel.currentList.forEach { dns ->
-                DnsEntry(
-                    dns = dns,
-                    isLoading = viewModel.isLoading,
-                    onExecute = { command -> viewModel.executeCommand(command) }
-                )
-            }
         }
     }
 }
 
-@Composable
 @Preview
+@Composable
 fun AppPreview() {
-    MaterialTheme {
+    XDNSTheme {
         App()
     }
 }

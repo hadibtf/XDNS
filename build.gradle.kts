@@ -16,9 +16,10 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.windows_x64)
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4") // Add coroutines core
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4") // Add coroutines swing for Dispatchers.Main
-
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.7.1")
+    implementation(compose.material)
+    implementation(compose.materialIconsExtended)
 }
 
 compose.desktop {
@@ -32,9 +33,11 @@ compose.desktop {
             packageName = "XDNS"
             packageVersion = "1.0.0"
             windows {
-                menuGroup = "ir.xdns" // Group in the Start Menu
-                shortcut = true // Enables shortcut creation
-                iconFile.set(project.file("src/main/resources/icon.png")) // Path to your icon
+                menuGroup = "ir.xdns"
+                shortcut = true
+                iconFile.set(project.file("src/main/resources/XDNS.ico"))
+                dirChooser = true
+                perUserInstall = true
             }
         }
     }
