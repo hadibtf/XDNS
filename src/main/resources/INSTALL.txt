@@ -1,0 +1,38 @@
+========== XDNS INSTALLATION INSTRUCTIONS ==========
+
+To enable administrator privileges for XDNS (required for changing DNS settings),
+please follow these simple steps after installation:
+
+1. Open Notepad as administrator (right-click on Notepad and select "Run as administrator")
+
+2. Copy and paste the following code into Notepad:
+   
+   @echo off
+   echo Requesting administrative privileges...
+   echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+   echo UAC.ShellExecute "%~dp0XDNS.exe", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
+   "%temp%\getadmin.vbs"
+   if exist "%temp%\getadmin.vbs" (del "%temp%\getadmin.vbs")
+   exit
+
+3. Save this file as "RunXDNS.bat" in the same folder where XDNS.exe is installed 
+   (typically in "C:\Program Files\XDNS" or similar location)
+
+4. Right-click on the created RunXDNS.bat file and select "Create shortcut"
+
+5. Move the shortcut to your desktop or any location you prefer
+
+6. Use this shortcut to run XDNS with administrator privileges automatically
+
+========== WHY THIS IS NECESSARY ==========
+
+Windows requires administrator privileges to change DNS settings. The above batch 
+file automatically requests these privileges when you run the application, so you 
+don't need to right-click and select "Run as administrator" each time.
+
+========== TROUBLESHOOTING ==========
+
+If you encounter any issues:
+- Make sure the path in the shortcut correctly points to the XDNS installation folder
+- Try running the application as administrator manually by right-clicking XDNS.exe
+- Check that your Windows user account has administrator privileges 

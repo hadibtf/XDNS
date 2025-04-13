@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "ir.xdns"
-version = "1.0-SNAPSHOT"
+version = "1.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -25,19 +25,23 @@ dependencies {
 compose.desktop {
     application {
         mainClass = "MainKt"
+        
         nativeDistributions {
             targetFormats(
                 TargetFormat.Msi,
                 TargetFormat.Exe,
             )
             packageName = "XDNS"
-            packageVersion = "1.0.0"
+            packageVersion = "1.1.0"
+
             windows {
                 menuGroup = "ir.xdns"
                 shortcut = true
                 iconFile.set(project.file("src/main/resources/XDNS.ico"))
                 dirChooser = true
                 perUserInstall = true
+                upgradeUuid = "1E2F5448-D3F3-4252-AFE4-BEF456A96ADF"
+                console = false
             }
         }
     }

@@ -1,6 +1,6 @@
 # XDNS
 
-![XDNS Icon](./screenshots/icon.png)
+![XDNS Icon](./screenshots/logo.png)
 
 **XDNS** is a streamlined, powerful DNS configuration utility for Windows that helps you easily bypass network restrictions and optimize your internet connection. With its modern, sleek interface built using Compose Multiplatform Desktop, XDNS makes managing DNS settings straightforward for both technical and non-technical users.
 
@@ -24,13 +24,13 @@
   - Clean, intuitive interface
   - Status indicators for all operations
   - Seamless category switching
-  - Administrator privileges management
+  - Simple administrator privileges management
 
 ## Requirements
 
 - **Windows**: Designed specifically for Windows operating systems
 - **Administrator Privileges**: Required to modify system DNS settings
-  - Run the application as Administrator (right-click → "Run as administrator")
+  - A launcher script is included to automatically request admin privileges
 
 ## Installation
 
@@ -38,15 +38,18 @@
 2. **Installation Options**:
    - `.exe`: Standalone executable installer
    - `.msi`: Windows Installer package (recommended)
-3. **Run**: Launch XDNS with administrator privileges
+3. **Administrator Setup**:
+   - After installation, locate the `RunXDNS.bat` file in the installation directory
+   - Create a shortcut to this batch file on your desktop
+   - Use this shortcut to launch XDNS with administrator privileges
 
 ## Usage Guide
 
-1. **View Current DNS**: Check your active DNS configuration at the top of the application
-2. **Select DNS Type**: Choose between "Sanctions" or "Speed" categories
-3. **Apply DNS**: Click "Select" on any DNS server to apply it to your system
-4. **Manage DNS**: Use the control buttons to reset, clear cache, or refresh status
-5. **Monitor Status**: Check operation status in the notification area
+1. **Launch**: Always use the `RunXDNS.bat` file or its shortcut to start the application
+2. **View Current DNS**: Check your active DNS configuration at the top of the application
+3. **Select DNS Type**: Choose between "Sanctions" or "Speed" categories
+4. **Apply DNS**: Click "Select" on any DNS server to apply it to your system
+5. **Manage DNS**: Use the control buttons to reset, clear cache, or refresh status
 
 ## Screenshots
 
@@ -57,6 +60,7 @@
 - **Simplified Network Management**: No need to navigate complex Windows network settings
 - **Quick Access**: Instantly switch between different DNS configurations
 - **User-Friendly**: Designed for everyday users who need DNS flexibility without technical complexity
+- **Hassle-Free Administration**: Included batch file automatically elevates privileges when needed
 
 ## License
 
