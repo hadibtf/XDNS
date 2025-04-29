@@ -23,10 +23,11 @@ fun App(viewModel: DnsViewModel = remember { DnsViewModel() }) {
             modifier = Modifier.fillMaxSize().padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header with status
-            DnsHeader(
-                currentDns = viewModel.currentDns,
-                isProtected = viewModel.isProtected
+            // Header with enhanced DNS status display
+            CurrentDnsDisplay(
+                primaryDns = viewModel.primaryDns,
+                secondaryDns = viewModel.secondaryDns,
+                protectionStatus = viewModel.protectionStatus
             )
             
             Spacer(modifier = Modifier.height(8.dp))
@@ -75,6 +76,13 @@ fun App(viewModel: DnsViewModel = remember { DnsViewModel() }) {
                 color = MaterialTheme.colors.onBackground.copy(alpha = 0.5f),
                 modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
             )
+        }
+    }
+    
+    // Clean up when disposed
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.onCleared()
         }
     }
 }

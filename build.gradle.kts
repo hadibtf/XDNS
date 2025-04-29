@@ -20,6 +20,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.7.1")
     implementation(compose.material)
     implementation(compose.materialIconsExtended)
+    
+    // Test dependencies
+    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
+    testImplementation("junit:junit:4.13.2")
 }
 
 compose.desktop {

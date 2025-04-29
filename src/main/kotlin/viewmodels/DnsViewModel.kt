@@ -5,6 +5,7 @@ import data.DnsConfig
 import data.DnsConfigurations
 import kotlinx.coroutines.*
 import repositories.DnsRepository
+import java.util.concurrent.TimeUnit
 
 class DnsViewModel {
     // Coroutine scope for background operations
@@ -17,9 +18,12 @@ class DnsViewModel {
     
     // Current DNS state (formatted to avoid duplication)
     var currentDns by mutableStateOf("Checking...")
+    var primaryDns by mutableStateOf("")
+    var secondaryDns by mutableStateOf("")
     private var rawDnsString by mutableStateOf("")
     
-    // Whether DNS is manually set (not DHCP)
+    // Protection status
+    var protectionStatus by mutableStateOf("Not Protected")
     var isProtected by mutableStateOf(false)
     
     // Track active DNS configuration
@@ -32,9 +36,26 @@ class DnsViewModel {
     val currentList: List<DnsConfig>
         get() = DnsConfigurations.getDnsByCategory(tabCategories[selectedTabIndex])
 
+    // DNS polling job
+    private var dnsMonitorJob: Job? = null
+
     init {
-        // Fetch the DNS once the ViewModel is created
-        fetchCurrentDns()
+        // Start continuous monitoring of DNS settings
+        startDnsMonitoring()
+    }
+    
+    private fun startDnsMonitoring() {
+        // Cancel existing job if it exists
+        dnsMonitorJob?.cancel()
+        
+        // Start new monitoring job
+        dnsMonitorJob = viewModelScope.launch {
+            while (isActive) {
+                fetchCurrentDns()
+                // Poll every 5 seconds
+                delay(TimeUnit.SECONDS.toMillis(5))
+            }
+        }
     }
     
     fun onTabSelected(index: Int) {
@@ -48,22 +69,19 @@ class DnsViewModel {
                 val result = DnsRepository.fetchCurrentDns()
                 rawDnsString = result
                 
-                // Format DNS entries to avoid duplications
-                val dnsEntries = result.lines()
-                    .filter { it.isNotBlank() }
-                    .distinct()
-                    .joinToString("\n")
-                
-                currentDns = dnsEntries
+                // Update DNS entries and status
+                updateDnsDisplay(result)
                 
                 // Check if current DNS matches any of our configurations and mark as active
                 updateActiveDns(result)
                 
-                // Determine if DNS is protected (not DHCP)
-                isProtected = !result.contains("Not set (DHCP)", ignoreCase = true) && 
-                              !result.contains("Error", ignoreCase = true)
+                // Update protection status
+                updateProtectionStatus()
             } catch (e: Exception) {
                 currentDns = "Error fetching DNS"
+                primaryDns = "Error"
+                secondaryDns = "Error"
+                protectionStatus = "Not Protected"
                 isProtected = false
             } finally {
                 isLoading = false
@@ -71,16 +89,43 @@ class DnsViewModel {
         }
     }
     
+    private fun updateDnsDisplay(dnsString: String) {
+        // Format DNS entries to avoid duplications
+        val dnsEntries = dnsString.lines()
+            .filter { it.isNotBlank() }
+            .distinct()
+            .joinToString("\n")
+        
+        currentDns = dnsEntries
+        
+        // Extract primary and secondary DNS for display
+        val dnsLines = dnsString.lines().filter { it.isNotBlank() }.distinct()
+        primaryDns = if (dnsLines.isNotEmpty()) dnsLines[0] else "Not set (DHCP)"
+        secondaryDns = if (dnsLines.size > 1) dnsLines[1] else ""
+        
+        // Determine if DNS is protected (not DHCP)
+        isProtected = !dnsString.contains("Not set (DHCP)", ignoreCase = true) && 
+                      !dnsString.contains("Error", ignoreCase = true)
+    }
+    
+    private fun updateProtectionStatus() {
+        protectionStatus = when {
+            activeDns != null -> "Protected: ${activeDns!!.name}"
+            isProtected -> "Undefined DNS"
+            else -> "Not Protected"
+        }
+    }
+    
     private fun updateActiveDns(dnsString: String) {
         activeDns = null
         
         // Try to find matching DNS
-        val allDnsList = DnsConfigurations.sanctionsDns + 
-                         DnsConfigurations.speedDns
+        val allDnsList = DnsConfigurations.sanctionsDns + DnsConfigurations.speedDns
                          
         for (dns in allDnsList) {
             // Check if the current DNS contains both primary and secondary servers
-            if (dnsString.contains(dns.primary) && dnsString.contains(dns.secondary)) {
+            if (dnsString.contains(dns.primary) && 
+               (dns.secondary.isEmpty() || dnsString.contains(dns.secondary))) {
                 activeDns = dns
                 break
             }
@@ -152,6 +197,7 @@ class DnsViewModel {
     
     // Clean up resources
     fun onCleared() {
+        dnsMonitorJob?.cancel()
         viewModelScope.cancel()
     }
 }

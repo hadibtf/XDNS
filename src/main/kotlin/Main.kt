@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,11 +15,13 @@ import androidx.compose.ui.window.application
 import androidx.compose.ui.res.painterResource
 import repositories.DnsRepository
 import ui.App
+import ui.composables.AdminRequiredDialog
 import ui.theme.XDNSTheme
 import java.io.File
 
 fun main() = application {
-    // The batch launcher will handle admin privileges
+    // Check if running with admin privileges
+    val isAdmin = remember { mutableStateOf(DnsRepository.isAdmin()) }
     
     Window(
         title = "XDNS",
@@ -27,7 +31,12 @@ fun main() = application {
         icon = painterResource("XDNS.ico"),
     ) {
         XDNSTheme {
-            App()
+            if (!isAdmin.value) {
+                // Show non-dismissible admin required dialog
+                AdminRequiredDialog(onCloseApp = ::exitApplication)
+            } else {
+                App()
+            }
         }
     }
 }
