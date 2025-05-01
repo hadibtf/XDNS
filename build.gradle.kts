@@ -37,7 +37,7 @@ compose.desktop {
                 TargetFormat.Exe,
             )
             packageName = "XDNS"
-            packageVersion = "1.1.0"
+            packageVersion = "1.1.1"
 
             windows {
                 menuGroup = "ir.xdns"
@@ -45,7 +45,7 @@ compose.desktop {
                 iconFile.set(project.file("src/main/resources/XDNS.ico"))
                 dirChooser = true
                 perUserInstall = true
-                upgradeUuid = "1E2F5448-D3F3-4252-AFE4-BEF456A96ADF"
+                upgradeUuid = "7b1ac03d-2926-48e8-b340-405cb638bafc"
                 console = false
             }
         }

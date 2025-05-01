@@ -5,7 +5,6 @@ import data.DnsConfig
 import data.DnsConfigurations
 import kotlinx.coroutines.*
 import repositories.DnsRepository
-import java.util.concurrent.TimeUnit
 
 class DnsViewModel {
     // Coroutine scope for background operations
@@ -36,28 +35,6 @@ class DnsViewModel {
     val currentList: List<DnsConfig>
         get() = DnsConfigurations.getDnsByCategory(tabCategories[selectedTabIndex])
 
-    // DNS polling job
-    private var dnsMonitorJob: Job? = null
-
-    init {
-        // Start continuous monitoring of DNS settings
-        startDnsMonitoring()
-    }
-    
-    private fun startDnsMonitoring() {
-        // Cancel existing job if it exists
-        dnsMonitorJob?.cancel()
-        
-        // Start new monitoring job
-        dnsMonitorJob = viewModelScope.launch {
-            while (isActive) {
-                fetchCurrentDns()
-                // Poll every 5 seconds
-                delay(TimeUnit.SECONDS.toMillis(5))
-            }
-        }
-    }
-    
     fun onTabSelected(index: Int) {
         selectedTabIndex = index
     }
@@ -68,13 +45,13 @@ class DnsViewModel {
                 isLoading = true
                 val result = DnsRepository.fetchCurrentDns()
                 rawDnsString = result
-                
+
                 // Update DNS entries and status
                 updateDnsDisplay(result)
-                
+
                 // Check if current DNS matches any of our configurations and mark as active
                 updateActiveDns(result)
-                
+
                 // Update protection status
                 updateProtectionStatus()
             } catch (e: Exception) {
@@ -88,7 +65,7 @@ class DnsViewModel {
             }
         }
     }
-    
+
     private fun updateDnsDisplay(dnsString: String) {
         // Format DNS entries to avoid duplications
         val dnsEntries = dnsString.lines()
@@ -193,11 +170,5 @@ class DnsViewModel {
                 isLoading = false
             }
         }
-    }
-    
-    // Clean up resources
-    fun onCleared() {
-        dnsMonitorJob?.cancel()
-        viewModelScope.cancel()
     }
 }

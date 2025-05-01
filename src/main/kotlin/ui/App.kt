@@ -5,7 +5,6 @@ import viewmodels.DnsViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,38 +22,24 @@ fun App(viewModel: DnsViewModel = remember { DnsViewModel() }) {
             modifier = Modifier.fillMaxSize().padding(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Header with enhanced DNS status display
-            CurrentDnsDisplay(
-                primaryDns = viewModel.primaryDns,
-                secondaryDns = viewModel.secondaryDns,
-                protectionStatus = viewModel.protectionStatus
-            )
-            
-            Spacer(modifier = Modifier.height(8.dp))
-            
             // Compact control panel
             CompactControlPanel(
                 isLoading = viewModel.isLoading,
                 onResetDns = { viewModel.resetDns() },
                 onClearCache = { viewModel.clearCache() },
-                onRefreshStatus = { viewModel.fetchCurrentDns() }
             )
-            
             // Status indicator
             StatusIndicator(
                 statusMessage = viewModel.outputText,
                 isLoading = viewModel.isLoading
             )
-            
             // DNS navigation component
             DnsNavigation(
                 categories = viewModel.tabCategories,
                 selectedIndex = viewModel.selectedTabIndex,
                 onCategorySelected = { viewModel.onTabSelected(it) }
             )
-            
             Spacer(modifier = Modifier.height(8.dp))
-            
             // DNS list
             LazyColumn(
                 modifier = Modifier.weight(1f)
@@ -68,21 +53,13 @@ fun App(viewModel: DnsViewModel = remember { DnsViewModel() }) {
                     )
                 }
             }
-            
             // Footer
             Text(
-                text = "XDNS v1.1.0",
+                text = "XDNS v1.1.1",
                 style = MaterialTheme.typography.caption,
                 color = MaterialTheme.colors.onBackground.copy(alpha = 0.5f),
                 modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
             )
-        }
-    }
-    
-    // Clean up when disposed
-    DisposableEffect(Unit) {
-        onDispose {
-            viewModel.onCleared()
         }
     }
 }

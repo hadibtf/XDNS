@@ -1,6 +1,5 @@
 package ui.composables
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -116,15 +115,11 @@ fun AdminRequiredDialog(
                         text = "• Click \"Apply\", then \"OK\".",
                         style = MaterialTheme.typography.body2
                     )
+                    Text(
+                        text = "• Relaunch the app.",
+                        style = MaterialTheme.typography.body2
+                    )
                 }
-                
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                Text(
-                    text = "After applying one of these methods, relaunch the app.",
-                    style = MaterialTheme.typography.body1,
-                    textAlign = TextAlign.Center
-                )
                 
                 Spacer(modifier = Modifier.height(24.dp))
                 
